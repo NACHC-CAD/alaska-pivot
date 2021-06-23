@@ -131,13 +131,6 @@
 			<version>20180130</version>
 		</dependency>
 
-		<!-- OPENCSV https://mvnrepository.com/artifact/com.opencsv/opencsv -->
-		<dependency>
-			<groupId>com.opencsv</groupId>
-			<artifactId>opencsv</artifactId>
-			<version>4.2</version>
-		</dependency>
-
 		<!-- APACHE COMMMONS-MATH3 https://mvnrepository.com/artifact/org.apache.commons/commons-math3 -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
