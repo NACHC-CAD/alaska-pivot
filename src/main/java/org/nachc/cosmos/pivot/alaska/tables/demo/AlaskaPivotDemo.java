@@ -23,7 +23,7 @@ public class AlaskaPivotDemo {
 			
 	private static final int END_FLAT = 12;
 	
-	private static final Object[] FLAT_HEADERS = {"org", "patient_id", "state", "sex_at_birth", "age", "date_of_death", "gender_identity", "race", "ethnicity", "language", "insurance_financial_class", "fpl_range", "sdoh_assessment_date"};
+	private static final Object[] PIVOT_HEADERS = {"org", "patient_id", "state", "sex_at_birth", "age", "date_of_death", "gender_identity", "race", "ethnicity", "language", "insurance_financial_class", "fpl_range", "sdoh_assessment_date"};
 
 	public static void exec(File srcFile) {
 		log.info("Starting pivot for LABS");
@@ -34,7 +34,7 @@ public class AlaskaPivotDemo {
 		log.info("Creating FLAT file");
 		writeFlatFileCsv(srcFile, flatFile);
 		log.info("Creating PIVOT file");
-		writePivotFileCsv(srcFile, pivotFile);
+		writePivotFileCsv(flatFile, pivotFile);
 		log.info("Done pivot");
 	}
 
@@ -43,7 +43,33 @@ public class AlaskaPivotDemo {
 			CSVParser parser = CsvUtilApache.getParser(srcFile);
 			CSVPrinter printer = CsvUtilApache.getWriter(flatFile);
 			int cnt = 0;
-			printer.printRecord(FLAT_HEADERS);
+			for (CSVRecord record : parser) {
+				if (cnt % 1000 == 0 && cnt != 0) {
+					log.info("Reading row " + cnt);
+				}
+				ArrayList<String> row = new ArrayList<String>();
+				row.add(record.get(0));
+				row.add(record.get(1));
+				for (int i = START_FLAT; i <= END_FLAT; i++) {
+					row.add(record.get(i));
+				}
+				// print the record
+				printer.printRecord(row);
+				// finish up
+				printer.flush();
+				cnt++;
+			}
+		} catch (Exception exp) {
+			throw new RuntimeException(exp);
+		}
+	}
+
+	private static void writePivotFileCsv(File srcFile, File pivotFile) {
+		try {
+			CSVParser parser = CsvUtilApache.getParser(srcFile);
+			CSVPrinter printer = CsvUtilApache.getWriter(pivotFile);
+			int cnt = 0;
+			printer.printRecord(PIVOT_HEADERS);
 			for (CSVRecord record : parser) {
 				// skip the headers
 				if (cnt == 0) {
@@ -68,10 +94,6 @@ public class AlaskaPivotDemo {
 		} catch (Exception exp) {
 			throw new RuntimeException(exp);
 		}
-	}
-
-	private static void writePivotFileCsv(File srcFile, File pivotFile) {
-		writeFlatFileCsv(srcFile, pivotFile);
 	}
 
 }

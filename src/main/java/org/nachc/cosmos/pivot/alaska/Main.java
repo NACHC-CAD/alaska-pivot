@@ -8,6 +8,7 @@ import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
 import org.nachc.cosmos.pivot.alaska.tables.demo.AlaskaPivotDemo;
 import org.nachc.cosmos.pivot.alaska.tables.labs.AlaskaPivotLabs;
+import org.nachc.cosmos.pivot.alaska.tables.vacc.AlaskaPivotVacc;
 
 import com.nach.core.util.csv.CsvUtilApache;
 import com.nach.core.util.string.StringUtil;
@@ -26,7 +27,7 @@ public class Main {
 		File srcFile = new File(SRC_FILE_NAME);
 		AlaskaPivotDemo.exec(srcFile);
 		AlaskaPivotLabs.exec(srcFile);
-		
+		AlaskaPivotVacc.exec(srcFile);
 		log.info("Done.");
 	}
 	

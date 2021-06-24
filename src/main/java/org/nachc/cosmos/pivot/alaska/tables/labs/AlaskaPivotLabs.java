@@ -17,12 +17,14 @@ import lombok.extern.slf4j.Slf4j;
 public class AlaskaPivotLabs {
 
 	private static final String FLAT_SUFFIX = "-LAB";
-	
+
 	private static final String PIVOT_SUFFIX = "-LAB_PIVOT";
-	
+
 	private static final int START_FLAT = 35;
-			
+
 	private static final int END_FLAT = 50;
+
+	private static final Object[] PIVOT_HEADERS = { "pca", "patient_id", "test_date", "test_result", "test_loinc", "test_description", "test_number" };
 
 	public static void exec(File srcFile) {
 		log.info("Starting pivot...");
@@ -67,7 +69,7 @@ public class AlaskaPivotLabs {
 			CSVPrinter printer = CsvUtilApache.getWriter(labFile);
 			int cnt = 0;
 			log.info("Writing pivot file");
-			printer.printRecord("pca", "patient_id", "test_date", "test_result", "test_loinc", "test_description", "test_number");
+			printer.printRecord(PIVOT_HEADERS);
 			for (CSVRecord record : parser) {
 				// skip the headers
 				if (cnt == 0) {
