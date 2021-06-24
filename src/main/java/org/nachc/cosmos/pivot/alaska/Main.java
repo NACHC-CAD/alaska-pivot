@@ -16,7 +16,6 @@ public class Main {
 	public static void main(String[] args) {
 		log.info("Starting pivots...");
 		File srcFile = new File(SRC_FILE_NAME);
-		PivotUtil pivot;
 		String[] headers;
 		// demo
 		headers = new String[] { "org", "patient_id", "state", "sex_at_birth", "age", "date_of_death", "gender_identity", "race", "ethnicity", "language", "insurance_financial_class", "fpl_range", "sdoh_assessment_date", "demo_number" };
