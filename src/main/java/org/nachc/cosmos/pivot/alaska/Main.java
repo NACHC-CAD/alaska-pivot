@@ -1,17 +1,8 @@
 package org.nachc.cosmos.pivot.alaska;
 
 import java.io.File;
-import java.util.ArrayList;
 
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVPrinter;
-import org.apache.commons.csv.CSVRecord;
-import org.nachc.cosmos.pivot.alaska.tables.demo.AlaskaPivotDemo;
-import org.nachc.cosmos.pivot.alaska.tables.labs.AlaskaPivotLabs;
-import org.nachc.cosmos.pivot.alaska.tables.vacc.AlaskaPivotVacc;
-
-import com.nach.core.util.csv.CsvUtilApache;
-import com.nach.core.util.string.StringUtil;
+import org.nachc.cosmos.pivot.util.pivot.PivotUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,10 +16,18 @@ public class Main {
 	public static void main(String[] args) {
 		log.info("Starting pivots...");
 		File srcFile = new File(SRC_FILE_NAME);
-		AlaskaPivotDemo.exec(srcFile);
-		AlaskaPivotLabs.exec(srcFile);
-		AlaskaPivotVacc.exec(srcFile);
+		PivotUtil pivot;
+		String[] headers;
+		// demo
+		headers = new String[] { "org", "patient_id", "state", "sex_at_birth", "age", "date_of_death", "gender_identity", "race", "ethnicity", "language", "insurance_financial_class", "fpl_range", "sdoh_assessment_date", "demo_number" };
+		new PivotUtil("-DEMO", "-DEMO_PIVOT", 2, 12, 11, 1, headers).exec(srcFile);
+		// vacc
+		headers = new String[] { "pca", "patient_id", "covid_vacc_date", "covid_vacc_cvx", "covid_vacc_manufacturer", "covid_vacc_refused", "vacc_number" };
+		new PivotUtil("-VACC", "-VACC_PIVOT", 51, 58, 4, 2, headers).exec(srcFile);
+		// lab
+		headers = new String[] {  "pca", "patient_id", "test_date", "test_result", "test_loinc", "test_description", "test_number"  };
+		new PivotUtil("-LAB", "-LAB_PIVOT", 35, 50, 4, 4, headers).exec(srcFile);
 		log.info("Done.");
 	}
-	
+
 }

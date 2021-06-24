@@ -24,6 +24,10 @@ public class AlaskaPivotLabs {
 
 	private static final int END_FLAT = 50;
 
+	private static final int PIVOT_WIDTH = 4;
+
+	private static final int PIVOT_REPEAT = 4;
+
 	private static final Object[] PIVOT_HEADERS = { "pca", "patient_id", "test_date", "test_result", "test_loinc", "test_description", "test_number" };
 
 	public static void exec(File srcFile) {
@@ -62,7 +66,7 @@ public class AlaskaPivotLabs {
 			throw new RuntimeException(exp);
 		}
 	}
-
+	
 	private static void writePivotFileCsv(File srcFile, File labFile) {
 		try {
 			CSVParser parser = CsvUtilApache.getParser(srcFile);
@@ -80,63 +84,22 @@ public class AlaskaPivotLabs {
 					log.info("Reading row " + cnt);
 				}
 				ArrayList<String> row;
-				int testNumber;
-				int start;
+				int iterNumber = 0;
+				int start = 2;
 				// first test
-				row = new ArrayList<String>();
-				row.add(record.get(0));
-				row.add(record.get(1));
-				start = 2;
-				testNumber = 1;
-				if (record.size() > (start + 3) && StringUtil.isEmpty(record.get(start)) == false) {
-					row.add(record.get(start));
-					row.add(record.get(start + 1));
-					row.add(record.get(start + 2));
-					row.add(record.get(start + 3));
-					row.add(testNumber + "");
-					printer.printRecord(row);
-				}
-				// second test
-				row = new ArrayList<String>();
-				row.add(record.get(0));
-				row.add(record.get(1));
-				start = start + 4;
-				testNumber = testNumber + 1;
-				if (record.size() > (start + 3) && StringUtil.isEmpty(record.get(start)) == false) {
-					row.add(record.get(start));
-					row.add(record.get(start + 1));
-					row.add(record.get(start + 2));
-					row.add(record.get(start + 3));
-					row.add(testNumber + "");
-					printer.printRecord(row);
-				}
-				// third test
-				row = new ArrayList<String>();
-				row.add(record.get(0));
-				row.add(record.get(1));
-				start = start + 4;
-				testNumber = testNumber + 1;
-				if (record.size() > (start + 3) && StringUtil.isEmpty(record.get(start)) == false) {
-					row.add(record.get(start));
-					row.add(record.get(start + 1));
-					row.add(record.get(start + 2));
-					row.add(record.get(start + 3));
-					row.add(testNumber + "");
-					printer.printRecord(row);
-				}
-				// fourth test
-				row = new ArrayList<String>();
-				row.add(record.get(0));
-				row.add(record.get(1));
-				start = start + 4;
-				testNumber = testNumber + 1;
-				if (record.size() > (start + 3) && StringUtil.isEmpty(record.get(start)) == false) {
-					row.add(record.get(start));
-					row.add(record.get(start + 1));
-					row.add(record.get(start + 2));
-					row.add(record.get(start + 3));
-					row.add(testNumber + "");
-					printer.printRecord(row);
+				for (int i = 0; i < PIVOT_REPEAT; i++) {
+					if (record.size() > (start + PIVOT_WIDTH - 1) && StringUtil.isEmpty(record.get(start)) == false) {
+						row = new ArrayList<String>();
+						row.add(record.get(0));
+						row.add(record.get(1));
+						for (int r = start; r < start + PIVOT_WIDTH; r++) {
+							row.add(record.get(r));
+						}
+						row.add((iterNumber + 1) + "");
+						printer.printRecord(row);
+					}
+					start = start + PIVOT_WIDTH;
+					iterNumber++;
 				}
 				// finish up
 				printer.flush();
@@ -146,5 +109,5 @@ public class AlaskaPivotLabs {
 			throw new RuntimeException(exp);
 		}
 	}
-
+	
 }

@@ -1,4 +1,4 @@
-package org.nachc.cosmos.pivot.alaska.tables.vacc;
+package org.nachc.cosmos.pivot.util.pivot;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -14,28 +14,39 @@ import com.nach.core.util.string.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class AlaskaPivotVacc {
+public class PivotUtil {
 
-	private static final String FLAT_SUFFIX = "-VACC";
+	private String flatSuffix;
 
-	private static final String PIVOT_SUFFIX = "-VACC_PIVOT";
+	private String pivotSuffix;
 
-	private static final int START_FLAT = 51;
+	private int startFlat;
 
-	private static final int END_FLAT = 58;
+	private int endFlat;
 
-	private static final int PIVOT_WIDTH = 4;
+	private int pivotWidth;
 
-	private static final int PIVOT_REPEAT = 2;
+	private int pivotRepeat;
 
-	private static final Object[] PIVOT_HEADERS = { "pca", "patient_id", "covid_vacc_date", "covid_vacc_cvx", "covid_vacc_manufacturer", "covid_vacc_refused", "vacc_number" };
+	private Object[] pivotHeaders = { "pca", "patient_id", "covid_vacc_date", "covid_vacc_cvx", "covid_vacc_manufacturer", "covid_vacc_refused", "vacc_number" };
 
-	public static void exec(File srcFile) {
+	public PivotUtil(String flatSuffix, String pivotSuffix, int startFlat, int endFlat, int pivotWidth, int pivotRepeat, Object[] pivotHeaders) {
+		super();
+		this.flatSuffix = flatSuffix;
+		this.pivotSuffix = pivotSuffix;
+		this.startFlat = startFlat;
+		this.endFlat = endFlat;
+		this.pivotWidth = pivotWidth;
+		this.pivotRepeat = pivotRepeat;
+		this.pivotHeaders = pivotHeaders;
+	}
+
+	public void exec(File srcFile) {
 		log.info("Starting pivot for LABS");
 		log.info("Getting Files");
 		// get files
-		File flatFile = FileUtil.createFileWithAppendedName(srcFile, FLAT_SUFFIX);
-		File pivotFile = FileUtil.createFileWithAppendedName(srcFile, PIVOT_SUFFIX);
+		File flatFile = FileUtil.createFileWithAppendedName(srcFile, flatSuffix);
+		File pivotFile = FileUtil.createFileWithAppendedName(srcFile, pivotSuffix);
 		log.info("Creating FLAT file");
 		writeFlatFileCsv(srcFile, flatFile);
 		log.info("Creating PIVOT file");
@@ -43,7 +54,7 @@ public class AlaskaPivotVacc {
 		log.info("Done pivot");
 	}
 
-	private static void writeFlatFileCsv(File srcFile, File flatFile) {
+	private void writeFlatFileCsv(File srcFile, File flatFile) {
 		try {
 			CSVParser parser = CsvUtilApache.getParser(srcFile);
 			CSVPrinter printer = CsvUtilApache.getWriter(flatFile);
@@ -55,7 +66,7 @@ public class AlaskaPivotVacc {
 				ArrayList<String> row = new ArrayList<String>();
 				row.add(record.get(0));
 				row.add(record.get(1));
-				for (int i = START_FLAT; i <= END_FLAT; i++) {
+				for (int i = startFlat; i <= endFlat; i++) {
 					row.add(record.get(i));
 				}
 				// print the record
@@ -69,13 +80,13 @@ public class AlaskaPivotVacc {
 		}
 	}
 
-	private static void writePivotFileCsv(File srcFile, File labFile) {
+	private void writePivotFileCsv(File srcFile, File labFile) {
 		try {
 			CSVParser parser = CsvUtilApache.getParser(srcFile);
 			CSVPrinter printer = CsvUtilApache.getWriter(labFile);
 			int cnt = 0;
 			log.info("Writing pivot file");
-			printer.printRecord(PIVOT_HEADERS);
+			printer.printRecord(pivotHeaders);
 			for (CSVRecord record : parser) {
 				// skip the headers
 				if (cnt == 0) {
@@ -89,18 +100,18 @@ public class AlaskaPivotVacc {
 				int iterNumber = 0;
 				int start = 2;
 				// first test
-				for (int i = 0; i < PIVOT_REPEAT; i++) {
-					if (record.size() > (start + PIVOT_WIDTH - 1) && StringUtil.isEmpty(record.get(start)) == false) {
+				for (int i = 0; i < pivotRepeat; i++) {
+					if (record.size() > (start + pivotWidth - 1) && StringUtil.isEmpty(record.get(start)) == false) {
 						row = new ArrayList<String>();
 						row.add(record.get(0));
 						row.add(record.get(1));
-						for (int r = start; r < start + PIVOT_WIDTH; r++) {
+						for (int r = start; r < start + pivotWidth; r++) {
 							row.add(record.get(r));
 						}
 						row.add((iterNumber + 1) + "");
 						printer.printRecord(row);
 					}
-					start = start + PIVOT_WIDTH;
+					start = start + pivotWidth;
 					iterNumber++;
 				}
 				// finish up
