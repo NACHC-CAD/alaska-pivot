@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
+import org.nachc.cosmos.pivot.alaska.tables.demo.AlaskaPivotDemo;
 import org.nachc.cosmos.pivot.alaska.tables.labs.AlaskaPivotLabs;
 
 import com.nach.core.util.csv.CsvUtilApache;
@@ -23,7 +24,9 @@ public class Main {
 	public static void main(String[] args) {
 		log.info("Starting pivots...");
 		File srcFile = new File(SRC_FILE_NAME);
+		AlaskaPivotDemo.exec(srcFile);
 		AlaskaPivotLabs.exec(srcFile);
+		
 		log.info("Done.");
 	}
 	

@@ -16,11 +16,19 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AlaskaPivotLabs {
 
+	private static final String FLAT_SUFFIX = "-LAB";
+	
+	private static final String PIVOT_SUFFIX = "-LAB_PIVOT";
+	
+	private static final int START_FLAT = 35;
+			
+	private static final int END_FLAT = 50;
+
 	public static void exec(File srcFile) {
 		log.info("Starting pivot...");
 		log.info("Getting Files");
-		File labFile = FileUtil.createFileWithAppendedName(srcFile, "_LAB");
-		File labPivotFile = FileUtil.createFileWithAppendedName(srcFile, "_LAB_PIVOT");
+		File labFile = FileUtil.createFileWithAppendedName(srcFile, FLAT_SUFFIX);
+		File labPivotFile = FileUtil.createFileWithAppendedName(srcFile, PIVOT_SUFFIX);
 		writeFlatFileCsv(srcFile, labFile);
 		writePivotFileCsv(labFile, labPivotFile);
 		log.info("Done.");
@@ -39,7 +47,7 @@ public class AlaskaPivotLabs {
 				ArrayList<String> row = new ArrayList<String>();
 				row.add(record.get(0));
 				row.add(record.get(1));
-				for (int i = 35; i <= 50; i++) {
+				for (int i = START_FLAT; i <= END_FLAT; i++) {
 					row.add(record.get(i));
 				}
 				// print the record
