@@ -22,6 +22,8 @@ public class AlaskaPivotDemo {
 	private static final int START_FLAT = 2;
 			
 	private static final int END_FLAT = 12;
+	
+	private static final Object[] FLAT_HEADERS = {"org", "patient_id", "state", "sex_at_birth", "age", "date_of_death", "gender_identity", "race", "ethnicity", "language", "insurance_financial_class", "fpl_range", "sdoh_assessment_date"};
 
 	public static void exec(File srcFile) {
 		log.info("Starting pivot for LABS");
@@ -41,7 +43,7 @@ public class AlaskaPivotDemo {
 			CSVParser parser = CsvUtilApache.getParser(srcFile);
 			CSVPrinter printer = CsvUtilApache.getWriter(flatFile);
 			int cnt = 0;
-			printer.printRecord("org", "patient_id", "state", "sex_at_birth", "age", "date_of_death", "gender_identity", "race", "ethnicity", "language", "insurance_financial_class", "fpl_range", "sdoh_assessment_date");
+			printer.printRecord(FLAT_HEADERS);
 			for (CSVRecord record : parser) {
 				// skip the headers
 				if (cnt == 0) {
