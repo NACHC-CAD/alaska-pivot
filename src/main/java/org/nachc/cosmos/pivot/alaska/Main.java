@@ -24,7 +24,7 @@ public class Main {
 		headers = new String[] { "pca", "patient_id", "covid_vacc_date", "covid_vacc_cvx", "covid_vacc_manufacturer", "covid_vacc_refused", "vacc_number" };
 		new PivotUtil("-VACC", "-VACC_PIVOT", 51, 58, 4, 2, headers).exec(srcFile);
 		// lab
-		headers = new String[] {  "pca", "patient_id", "test_date", "test_result", "test_loinc", "test_description", "test_number"  };
+		headers = new String[] { "pca", "patient_id", "test_date", "test_result", "test_loinc", "test_description", "test_number" };
 		new PivotUtil("-LAB", "-LAB_PIVOT", 35, 50, 4, 4, headers).exec(srcFile);
 		log.info("Done.");
 	}
