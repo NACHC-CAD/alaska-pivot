@@ -91,7 +91,7 @@ public class PivotUtil {
 			int cnt = 0;
 			for (CSVRecord record : parser) {
 				if (cnt % 1000 == 0 && cnt != 0) {
-					log.info("Reading row " + cnt);
+					log.info("  Reading row " + cnt);
 				}
 				ArrayList<String> row = new ArrayList<String>();
 				for (int c = 0; c < constantsWidth; c++) {
@@ -135,7 +135,7 @@ public class PivotUtil {
 					continue;
 				}
 				if (cnt % 1000 == 0 && cnt != 0) {
-					log.info("Reading row " + cnt);
+					log.info("  Reading row " + cnt);
 				}
 				ArrayList<String> row;
 				int iterNumber = 0;
@@ -182,7 +182,7 @@ public class PivotUtil {
 			for (CSVRecord record : parser) {
 				// echo status
 				if (cnt % 1000 == 0 && cnt != 0) {
-					log.info("Reading row " + cnt);
+					log.info("  Reading row " + cnt);
 				}
 				// get the headers
 				if (cnt == 0) {
