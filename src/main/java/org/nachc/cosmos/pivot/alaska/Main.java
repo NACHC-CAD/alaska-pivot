@@ -2,6 +2,7 @@ package org.nachc.cosmos.pivot.alaska;
 
 import java.io.File;
 
+import org.nachc.cosmos.pivot.util.pivot.PivotType;
 import org.nachc.cosmos.pivot.util.pivot.PivotUtil;
 
 import lombok.extern.slf4j.Slf4j;
@@ -27,8 +28,17 @@ public class Main {
 		headers = new String[] { "pca", "patient_id", "test_date", "test_result", "test_loinc", "test_description", "test_number" };
 		new PivotUtil("-LAB", "-LAB_PIVOT", 35, 50, 4, 4, 2, headers).exec(srcFile);
 		// sdoh
-		headers = new String[] {"pca","patient_id","sdoh_date", "sdoh_description","sdoh_value"};
-		new PivotUtil("-SDOH", "-SDOH_PIVOT", 12, 34, 22, 1, 2, 3, headers).exec(srcFile, true);
+		headers = new String[] { "pca", "patient_id", "sdoh_date", "sdoh_description", "sdoh_value" };
+		new PivotUtil("-SDOH", "-SDOH_PIVOT", 12, 34, 22, 1, 2, 3, headers).exec(srcFile, PivotType.USE_HEADERS);
+		// obs
+		headers = new String[] { "pca", "patient_id", "sdoh_date", "sdoh_description", "sdoh_value" };
+		new PivotUtil("-SDOH", "-SDOH_PIVOT", 12, 34, 22, 1, 2, 3, headers).exec(srcFile, PivotType.USE_HEADERS);
+		// dx1
+		headers = new String[] { "pca", "patient_id", "dx_date", "dx_code", "dx_description", "position" };
+		new PivotUtil("-DX1", "-DX1_PIVOT", 60, 68, 2, 4, 2, headers).exec(srcFile, PivotType.ADD_HEADERS);
+		// dx2
+		headers = new String[] { "pca", "patient_id", "dx_date", "dx_code", "dx_description", "position" };
+		new PivotUtil("-DX2", "-DX2_PIVOT", 71, 102, 2, 16, 2, headers).exec(srcFile, PivotType.ADD_HEADERS);
 		// DONE
 		log.info("Done.");
 	}

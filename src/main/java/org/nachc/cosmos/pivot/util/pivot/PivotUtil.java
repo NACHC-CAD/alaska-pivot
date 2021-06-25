@@ -33,6 +33,8 @@ public class PivotUtil {
 	private int pivotConstants;
 
 	private Object[] pivotHeaders;
+	
+	private PivotType pivotType = PivotType.PIVOT;
 
 	public PivotUtil(String flatSuffix, String pivotSuffix, int startFlat, int endFlat, int pivotWidth, int pivotRepeat, int constantsWidth, Object[] pivotHeaders) {
 		super();
@@ -60,10 +62,10 @@ public class PivotUtil {
 	}
 
 	public void exec(File srcFile) {
-		exec(srcFile, false);
+		exec(srcFile, PivotType.PIVOT);
 	}
 
-	public void exec(File srcFile, boolean headersAreValues) {
+	public void exec(File srcFile, PivotType pivotType) {
 		log.info("Starting pivot for " + pivotSuffix);
 		log.info("Getting Files");
 		// get files
@@ -72,10 +74,12 @@ public class PivotUtil {
 		log.info("Creating FLAT file");
 		writeFlatFileCsv(srcFile, flatFile);
 		log.info("Creating PIVOT file");
-		if (headersAreValues == true) {
-			writePivotFileWithHeaderValuesCsv(flatFile, pivotFile);
+		if (pivotType.equals(PivotType.USE_HEADERS)) {
+			doPivotWithHeaders(flatFile, pivotFile);
+		} else if(pivotType.equals(PivotType.ADD_HEADERS)) {
+			doPivot(flatFile, pivotFile, true);
 		} else {
-			writePivotFileCsv(flatFile, pivotFile);
+			doPivot(flatFile, pivotFile);
 		}
 		log.info("Done pivot");
 	}
@@ -107,17 +111,26 @@ public class PivotUtil {
 		}
 	}
 
-	private void writePivotFileCsv(File srcFile, File labFile) {
+	private void doPivot(File srcFile, File pivotFile) {
+		doPivot(srcFile, pivotFile, false);
+	}
+	
+	private void doPivot(File srcFile, File pivotFile, boolean addHeader) {
 		try {
 			log.info("Doing pivot");
 			CSVParser parser = CsvUtilApache.getParser(srcFile);
-			CSVPrinter printer = CsvUtilApache.getWriter(labFile);
+			CSVPrinter printer = CsvUtilApache.getWriter(pivotFile);
 			int cnt = 0;
 			log.info("Writing pivot file");
 			printer.printRecord(pivotHeaders);
+			ArrayList<String> keys = new ArrayList<String>();
 			for (CSVRecord record : parser) {
-				// skip the headers
+				// collect headers and move on
 				if (cnt == 0) {
+					for (int i = 0; i < record.size(); i++) {
+						String key = record.get(i);
+						keys.add(key);
+					}
 					cnt++;
 					continue;
 				}
@@ -127,14 +140,20 @@ public class PivotUtil {
 				ArrayList<String> row;
 				int iterNumber = 0;
 				int start = 2;
+				int keyCount = constantsWidth;
 				// process the record
 				for (int i = 0; i < pivotRepeat; i++) {
 					if (record.size() > (start + pivotWidth - 1) && StringUtil.isEmpty(record.get(start)) == false) {
 						row = new ArrayList<String>();
+						// TODO: PARAMETERIZE THIS
 						row.add(record.get(0));
 						row.add(record.get(1));
 						for (int r = start; r < start + pivotWidth; r++) {
 							row.add(record.get(r));
+						}
+						if(addHeader == true) {
+							keyCount = (i * pivotWidth) + constantsWidth;
+							row.add(keys.get(keyCount));
 						}
 						row.add((iterNumber + 1) + "");
 						printer.printRecord(row);
@@ -151,7 +170,7 @@ public class PivotUtil {
 		}
 	}
 
-	private void writePivotFileWithHeaderValuesCsv(File srcFile, File labFile) {
+	private void doPivotWithHeaders(File srcFile, File labFile) {
 		try {
 			log.info("Doing pivot");
 			CSVParser parser = CsvUtilApache.getParser(srcFile);
