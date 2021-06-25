@@ -28,9 +28,13 @@ public class PivotUtil {
 
 	private int pivotRepeat;
 
-	private Object[] pivotHeaders = { "pca", "patient_id", "covid_vacc_date", "covid_vacc_cvx", "covid_vacc_manufacturer", "covid_vacc_refused", "vacc_number" };
+	private int constantsWidth;
+	
+	private int pivotConstants;
 
-	public PivotUtil(String flatSuffix, String pivotSuffix, int startFlat, int endFlat, int pivotWidth, int pivotRepeat, Object[] pivotHeaders) {
+	private Object[] pivotHeaders;
+
+	public PivotUtil(String flatSuffix, String pivotSuffix, int startFlat, int endFlat, int pivotWidth, int pivotRepeat, int constantsWidth, Object[] pivotHeaders) {
 		super();
 		this.flatSuffix = flatSuffix;
 		this.pivotSuffix = pivotSuffix;
@@ -38,11 +42,29 @@ public class PivotUtil {
 		this.endFlat = endFlat;
 		this.pivotWidth = pivotWidth;
 		this.pivotRepeat = pivotRepeat;
+		this.constantsWidth = constantsWidth;
+		this.pivotHeaders = pivotHeaders;
+	}
+
+	public PivotUtil(String flatSuffix, String pivotSuffix, int startFlat, int endFlat, int pivotWidth, int pivotRepeat, int constantsWidth, int pivotConstants, Object[] pivotHeaders) {
+		super();
+		this.flatSuffix = flatSuffix;
+		this.pivotSuffix = pivotSuffix;
+		this.startFlat = startFlat;
+		this.endFlat = endFlat;
+		this.pivotWidth = pivotWidth;
+		this.pivotRepeat = pivotRepeat;
+		this.constantsWidth = constantsWidth;
+		this.pivotConstants = pivotConstants;
 		this.pivotHeaders = pivotHeaders;
 	}
 
 	public void exec(File srcFile) {
-		log.info("Starting pivot for LABS");
+		exec(srcFile, false);
+	}
+
+	public void exec(File srcFile, boolean headersAreValues) {
+		log.info("Starting pivot for " + pivotSuffix);
 		log.info("Getting Files");
 		// get files
 		File flatFile = FileUtil.createFileWithAppendedName(srcFile, flatSuffix);
@@ -50,7 +72,11 @@ public class PivotUtil {
 		log.info("Creating FLAT file");
 		writeFlatFileCsv(srcFile, flatFile);
 		log.info("Creating PIVOT file");
-		writePivotFileCsv(flatFile, pivotFile);
+		if (headersAreValues == true) {
+			writePivotFileWithHeaderValuesCsv(flatFile, pivotFile);
+		} else {
+			writePivotFileCsv(flatFile, pivotFile);
+		}
 		log.info("Done pivot");
 	}
 
@@ -64,8 +90,9 @@ public class PivotUtil {
 					log.info("Reading row " + cnt);
 				}
 				ArrayList<String> row = new ArrayList<String>();
-				row.add(record.get(0));
-				row.add(record.get(1));
+				for (int c = 0; c < constantsWidth; c++) {
+					row.add(record.get(c));
+				}
 				for (int i = startFlat; i <= endFlat; i++) {
 					row.add(record.get(i));
 				}
@@ -82,6 +109,7 @@ public class PivotUtil {
 
 	private void writePivotFileCsv(File srcFile, File labFile) {
 		try {
+			log.info("Doing pivot");
 			CSVParser parser = CsvUtilApache.getParser(srcFile);
 			CSVPrinter printer = CsvUtilApache.getWriter(labFile);
 			int cnt = 0;
@@ -99,7 +127,7 @@ public class PivotUtil {
 				ArrayList<String> row;
 				int iterNumber = 0;
 				int start = 2;
-				// first test
+				// process the record
 				for (int i = 0; i < pivotRepeat; i++) {
 					if (record.size() > (start + pivotWidth - 1) && StringUtil.isEmpty(record.get(start)) == false) {
 						row = new ArrayList<String>();
@@ -116,6 +144,49 @@ public class PivotUtil {
 				}
 				// finish up
 				printer.flush();
+				cnt++;
+			}
+		} catch (Exception exp) {
+			throw new RuntimeException(exp);
+		}
+	}
+
+	private void writePivotFileWithHeaderValuesCsv(File srcFile, File labFile) {
+		try {
+			log.info("Doing pivot");
+			CSVParser parser = CsvUtilApache.getParser(srcFile);
+			CSVPrinter printer = CsvUtilApache.getWriter(labFile);
+			int cnt = 0;
+			log.info("* * * Writing pivot file WITH HEADERS * * *");
+			printer.printRecord(pivotHeaders);
+			ArrayList<String> keys = new ArrayList<String>();
+			for (CSVRecord record : parser) {
+				// echo status
+				if (cnt % 1000 == 0 && cnt != 0) {
+					log.info("Reading row " + cnt);
+				}
+				// get the headers
+				if (cnt == 0) {
+					for (int i = 0; i < record.size(); i++) {
+						String key = record.get(i);
+						keys.add(key);
+					}
+				} else {
+					ArrayList<String> row;
+					// process the record
+					if (record.size() >= pivotWidth + 2) {
+						for (int r = pivotConstants; r <= pivotWidth + constantsWidth; r++) {
+							row = new ArrayList<String>();
+							for (int c = 0; c < pivotConstants; c++) {
+								row.add(record.get(c));
+							}
+							row.add(keys.get(r));
+							row.add(record.get(r));
+							printer.printRecord(row);
+							printer.flush();
+						}
+					}
+				}
 				cnt++;
 			}
 		} catch (Exception exp) {
