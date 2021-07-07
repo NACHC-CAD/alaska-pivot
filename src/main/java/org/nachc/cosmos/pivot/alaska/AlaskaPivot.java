@@ -8,7 +8,7 @@ import org.nachc.cosmos.pivot.util.pivot.PivotUtil;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class Main {
+public class AlaskaPivot {
 
 	public static final String SRC_FILE_NAME = "C:\\_WORKSPACES\\nachc\\_PROJECT\\cosmos\\covid\\update-2021-06-22-COVID-APCA\\_ETC\\macro\\APCA_NACHC_C19_202001_202105.csv";
 

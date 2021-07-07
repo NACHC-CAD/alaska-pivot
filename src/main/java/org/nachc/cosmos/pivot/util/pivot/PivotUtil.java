@@ -139,15 +139,17 @@ public class PivotUtil {
 				}
 				ArrayList<String> row;
 				int iterNumber = 0;
-				int start = 2;
+				// TODO: CHECK THIS IF ALASKA GOES AWRY
+				int start = this.constantsWidth;
 				int keyCount = constantsWidth;
 				// process the record
 				for (int i = 0; i < pivotRepeat; i++) {
 					if (record.size() > (start + pivotWidth - 1) && StringUtil.isEmpty(record.get(start)) == false) {
 						row = new ArrayList<String>();
-						// TODO: PARAMETERIZE THIS
-						row.add(record.get(0));
-						row.add(record.get(1));
+						// TODO: CHECK THIS IF ALASKA GOES AWRY
+						for(int c=0;c<this.constantsWidth;c++) {
+							row.add(record.get(i));
+						}
 						for (int r = start; r < start + pivotWidth; r++) {
 							row.add(record.get(r));
 						}
