@@ -19,11 +19,14 @@ public class Main {
 		File srcFile = new File(SRC_FILE_NAME);
 		String[] headers;
 		// demo
-		headers = new String[] { "org", "patient_id", "state", "sex_at_birth", "age", "date_of_death", "gender_identity", "race", "ethnicity", "language", "insurance_financial_class", "fpl_range", "sdoh_assessment_date", "demo_number" };
+		headers = new String[] { "pca", "patient_id", "state", "sex_at_birth", "age", "date_of_death", "gender_identity", "race", "ethnicity", "language", "insurance_financial_class", "fpl_range", "sdoh_assessment_date", "demo_number" };
 		new PivotUtil("-DEMO", "-DEMO_PIVOT", 2, 12, 11, 1, 2, headers).exec(srcFile);
-		// vacc
-		headers = new String[] { "pca", "patient_id", "covid_vacc_date", "covid_vacc_cvx", "covid_vacc_manufacturer", "covid_vacc_refused", "vacc_number" };
-		new PivotUtil("-VACC", "-VACC_PIVOT", 51, 58, 4, 2, 2, headers).exec(srcFile);
+		// vacc (covid)
+		headers = new String[] { "pca", "patient_id", "vacc_date", "covid_cvx", "vacc_manufacturer", "vacc_refused", "vacc_number" };
+		new PivotUtil("-VACC_COVID", "-VACC_COVID_PIVOT", 51, 58, 4, 2, 2, headers).exec(srcFile);
+		// vacc (flu)
+		headers = new String[] { "pca", "patient_id", "vacc_date", "flu_cvx", "vacc_manufacturer", "vacc_refused", "vacc_number" };
+		new PivotUtil("-VACC_FLU", "-VACC_FLU_PIVOT", 104, 107, 4, 1, 2, headers).exec(srcFile);
 		// lab
 		headers = new String[] { "pca", "patient_id", "test_date", "test_result", "test_loinc", "test_description", "test_number" };
 		new PivotUtil("-LAB", "-LAB_PIVOT", 35, 50, 4, 4, 2, headers).exec(srcFile);
