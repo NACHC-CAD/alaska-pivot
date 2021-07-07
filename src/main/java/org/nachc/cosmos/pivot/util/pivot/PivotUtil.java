@@ -196,7 +196,8 @@ public class PivotUtil {
 					ArrayList<String> row;
 					// process the record
 					if (record.size() >= pivotWidth + 2) {
-						for (int r = pivotConstants; r <= pivotWidth + constantsWidth; r++) {
+						for (int r = pivotConstants; r < keys.size(); r++) {
+							// TODO: CHECK HERE IF ALASKA GOES AWRY
 							row = new ArrayList<String>();
 							for (int c = 0; c < pivotConstants; c++) {
 								row.add(record.get(c));
