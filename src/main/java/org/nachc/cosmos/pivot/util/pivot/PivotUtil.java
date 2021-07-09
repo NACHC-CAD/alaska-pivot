@@ -148,7 +148,7 @@ public class PivotUtil {
 						row = new ArrayList<String>();
 						// TODO: CHECK THIS IF ALASKA GOES AWRY
 						for(int c=0;c<this.constantsWidth;c++) {
-							row.add(record.get(i));
+							row.add(record.get(c));
 						}
 						for (int r = start; r < start + pivotWidth; r++) {
 							row.add(record.get(r));
