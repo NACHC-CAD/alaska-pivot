@@ -29,11 +29,11 @@ public class PivotUtil {
 	private int pivotRepeat;
 
 	private int constantsWidth;
-	
+
 	private int pivotConstants;
 
 	private Object[] pivotHeaders;
-	
+
 	private PivotType pivotType = PivotType.PIVOT;
 
 	public PivotUtil(String flatSuffix, String pivotSuffix, int startFlat, int endFlat, int pivotWidth, int pivotRepeat, int constantsWidth, Object[] pivotHeaders) {
@@ -66,6 +66,10 @@ public class PivotUtil {
 	}
 
 	public void exec(File srcFile, PivotType pivotType) {
+		exec(srcFile, pivotType, 0);
+	}
+
+	public void exec(File srcFile, PivotType pivotType, int headerOffset) {
 		log.info("Starting pivot for " + pivotSuffix);
 		log.info("Getting Files");
 		// get files
@@ -76,8 +80,8 @@ public class PivotUtil {
 		log.info("Creating PIVOT file");
 		if (pivotType.equals(PivotType.USE_HEADERS)) {
 			doPivotWithHeaders(flatFile, pivotFile);
-		} else if(pivotType.equals(PivotType.ADD_HEADERS)) {
-			doPivot(flatFile, pivotFile, true);
+		} else if (pivotType.equals(PivotType.ADD_HEADERS)) {
+			doPivot(flatFile, pivotFile, true, headerOffset);
 		} else {
 			doPivot(flatFile, pivotFile);
 		}
@@ -114,8 +118,13 @@ public class PivotUtil {
 	private void doPivot(File srcFile, File pivotFile) {
 		doPivot(srcFile, pivotFile, false);
 	}
-	
+
 	private void doPivot(File srcFile, File pivotFile, boolean addHeader) {
+		doPivot(srcFile, pivotFile, addHeader, 0);
+	}
+
+	
+	private void doPivot(File srcFile, File pivotFile, boolean addHeader, int headerOffset) {
 		try {
 			log.info("Doing pivot");
 			CSVParser parser = CsvUtilApache.getParser(srcFile);
@@ -147,14 +156,14 @@ public class PivotUtil {
 					if (record.size() > (start + pivotWidth - 1) && StringUtil.isEmpty(record.get(start)) == false) {
 						row = new ArrayList<String>();
 						// TODO: CHECK THIS IF ALASKA GOES AWRY
-						for(int c=0;c<this.constantsWidth;c++) {
+						for (int c = 0; c < this.constantsWidth; c++) {
 							row.add(record.get(c));
 						}
 						for (int r = start; r < start + pivotWidth; r++) {
 							row.add(record.get(r));
 						}
-						if(addHeader == true) {
-							keyCount = (i * pivotWidth) + constantsWidth;
+						if (addHeader == true) {
+							keyCount = (i * pivotWidth) + constantsWidth + headerOffset;
 							row.add(keys.get(keyCount));
 						}
 						row.add((iterNumber + 1) + "");
