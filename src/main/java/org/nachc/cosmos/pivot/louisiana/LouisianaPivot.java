@@ -14,7 +14,7 @@ public class LouisianaPivot {
 
 //	public static final String SRC_FILE_NAME = "C:\\_WORKSPACES\\nachc\\_PROJECT\\cosmos\\covid\\update-2021-07-07-COVID-LPCA\\_ETC\\macro\\LPCA-Thumbnail.csv\\";
 	
-	public static final String SRC_FILE_NAME = "C:\\_WORKSPACES\\nachc\\_PROJECT\\cosmos\\covid\\update-2021-07-07-COVID-LPCA\\_ETC\\macro\\LPCA_AE_2021.06.18_v2.csv\\";
+	public static final String SRC_FILE_NAME = "C:\\_WORKSPACES\\nachc\\_PROJECT\\cosmos\\covid\\update-2021-07-07-COVID-LPCA\\_ETC\\macro\\LPCA_AE_2021.06.18_v3.csv\\";
 	
 	public static void main(String[] args) {
 		log.info("Starting pivots...");
@@ -35,6 +35,9 @@ public class LouisianaPivot {
 		// vacc-flu
 		headers = new String[] { "pca", "health_center_name", "patient_id", "vacc_date", "vacc_cvx", "vacc_manufacturer", "vacc_refused", "vacc_number" };
 		new PivotUtil("-VACC_FLU", "-VACC_FLU_PIVOT", 103, 106, 4, 1, 3, headers).exec(srcFile);
+		// dx
+		headers = new String[] { "pca", "health_center_name", "patient_id", "dx_date", "dx_code", "dx_number" };
+		new PivotUtil("-DX_COVID", "-DX_COVID_PIVOT", 92, 93, 2, 1, 3, headers).exec(srcFile);
 		log.info("Done.");
 	}
 	

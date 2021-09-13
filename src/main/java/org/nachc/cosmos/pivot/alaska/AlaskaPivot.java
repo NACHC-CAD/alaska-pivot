@@ -10,10 +10,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AlaskaPivot {
 
-	public static final String SRC_FILE_NAME = "C:\\_WORKSPACES\\nachc\\_PROJECT\\cosmos\\covid\\update-2021-06-22-COVID-APCA\\_ETC\\macro\\APCA_NACHC_C19_202001_202105.csv";
-
+//	public static final String SRC_FILE_NAME = "C:\\_WORKSPACES\\nachc\\_PROJECT\\cosmos\\covid\\update-2021-06-22-COVID-APCA\\_ETC\\macro\\APCA_NACHC_C19_202001_202105.csv";
 //	public static final String SRC_FILE_NAME = "C:\\_WORKSPACES\\nachc\\_PROJECT\\cosmos\\covid\\update-2021-06-22-COVID-APCA\\_ETC\\macro\\testing\\APCA_NACHC_C19_202001_202105_THUMB-500.csv";
+	public static final String SRC_FILE_NAME = "C:\\_WORKSPACES\\nachc\\_PROJECT\\cosmos\\covid\\apca\\update-2021-07-21-COVID-APCA\\_ETC\\macro\\APCA_NACHC_C19_202106b.csv";
 
+	
 	public static void main(String[] args) {
 		log.info("Starting pivots...");
 		File srcFile = new File(SRC_FILE_NAME);
