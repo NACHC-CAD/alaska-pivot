@@ -13,10 +13,12 @@ public class OhioPivot {
 	public static final String SRC_FILE_NAME = "C:\\_WORKSPACES\\nachc\\_PROJECT\\cosmos\\hiv\\update-2021-08-13-HIV-OACHC\\_ETC\\pivot\\2021_08_13_872 OACHC LL Data July 2021 Azara.csv";
 
 	public static void main(String[] args) {
+		doPivot(new File(SRC_FILE_NAME));
+	}
+	
+	public static void doPivot(File srcFile) {
 		log.info("Starting pivots...");
-		File srcFile = new File(SRC_FILE_NAME);
 		String[] headers;
-		
 		// preg
 		headers = new String[] { "Zip", "Sex at Birth", "Race Unscrubbed", "Usual Provider", "Race", "Ethnicity", "Language", "Housing Situation UDS", "Fake Id", "Age", "Language Record Date", "Language Patient Detail", "FPL Range", "FPL Value", "Housing Trigger", "Insurance Financial Class", "Insurance Primary Payer", "Most Recent Encounter Date", "Most Recent Encounter Provider", "Most Recent Encounter Location", "Pregnancy Episode Start Date", "Pregnancy Episode Indicator", "Pregnancy Episode End Date", "Pregnancy Episode Prenatal Entry", "pos" };
 		new PivotUtil("-PREG", "-PREG_PIVOT", 20, 23, 4, 1, 20, headers).exec(srcFile);

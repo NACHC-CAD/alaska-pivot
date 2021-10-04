@@ -34,6 +34,8 @@ public class PivotUtil {
 
 	private Object[] pivotHeaders;
 
+	private int writeCnt = 0;
+	
 	private PivotType pivotType = PivotType.PIVOT;
 
 	public PivotUtil(String flatSuffix, String pivotSuffix, int startFlat, int endFlat, int pivotWidth, int pivotRepeat, int constantsWidth, Object[] pivotHeaders) {
@@ -90,6 +92,7 @@ public class PivotUtil {
 
 	private void writeFlatFileCsv(File srcFile, File flatFile) {
 		try {
+			writeCnt++;
 			CSVParser parser = CsvUtilApache.getParser(srcFile);
 			CSVPrinter printer = CsvUtilApache.getWriter(flatFile);
 			int cnt = 0;
@@ -102,6 +105,12 @@ public class PivotUtil {
 					row.add(record.get(c));
 				}
 				for (int i = startFlat; i <= endFlat; i++) {
+					if(cnt == 0 && i == startFlat && writeCnt == 1) {
+						log.info("cnt");
+						log.info("length: " + record.size());
+						log.info("\n" + record.toString());
+						log.info("---");
+					}
 					row.add(record.get(i));
 				}
 				// print the record
