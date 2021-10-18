@@ -1,4 +1,4 @@
-package org.nachc.cosmos.pivot.util.pivot;
+package org.nachc.cosmos.pivot.util.pivot.legacy;
 
 import java.io.File;
 import java.util.ArrayList;

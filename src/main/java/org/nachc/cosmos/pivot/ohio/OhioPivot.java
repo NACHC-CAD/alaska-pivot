@@ -2,8 +2,8 @@ package org.nachc.cosmos.pivot.ohio;
 
 import java.io.File;
 
-import org.nachc.cosmos.pivot.util.pivot.PivotType;
-import org.nachc.cosmos.pivot.util.pivot.PivotUtil;
+import org.nachc.cosmos.pivot.util.pivot.legacy.PivotType;
+import org.nachc.cosmos.pivot.util.pivot.legacy.PivotUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,7 +15,7 @@ public class OhioPivot {
 	public static void main(String[] args) {
 		doPivot(new File(SRC_FILE_NAME));
 	}
-	
+
 	public static void doPivot(File srcFile) {
 		log.info("Starting pivots...");
 		String[] headers;
@@ -55,7 +55,8 @@ public class OhioPivot {
 		// hx
 		headers = new String[] { "Zip", "Sex at Birth", "Race Unscrubbed", "Usual Provider", "Race", "Ethnicity", "Language", "Housing Situation UDS", "Fake Id", "Age", "Language Record Date", "Language Patient Detail", "FPL Range", "FPL Value", "Housing Trigger", "Insurance Financial Class", "Insurance Primary Payer", "Most Recent Encounter Date", "Most Recent Encounter Provider", "Most Recent Encounter Location", "Hx Date", "Hx Detail", "Hx Category", "pos" };
 		new PivotUtil("-HX", "-HX_PIVOT", 64, 77, 2, 7, 20, headers).exec(srcFile, PivotType.ADD_HEADERS, 1);
-		// PARAMETERS: flatSuffix, String pivotSuffix, int startFlat, int endFlat, int pivotWidth, int pivotRepeat, int constantsWidth, Object[] pivotHeaders
+		// PARAMETERS: flatSuffix, String pivotSuffix, int startFlat, int endFlat, int
+		// pivotWidth, int pivotRepeat, int constantsWidth, Object[] pivotHeaders
 		// done
 		log.info("Done.");
 	}

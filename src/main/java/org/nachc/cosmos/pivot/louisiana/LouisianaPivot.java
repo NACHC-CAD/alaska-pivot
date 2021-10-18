@@ -2,8 +2,8 @@ package org.nachc.cosmos.pivot.louisiana;
 
 import java.io.File;
 
-import org.nachc.cosmos.pivot.util.pivot.PivotType;
-import org.nachc.cosmos.pivot.util.pivot.PivotUtil;
+import org.nachc.cosmos.pivot.util.pivot.legacy.PivotType;
+import org.nachc.cosmos.pivot.util.pivot.legacy.PivotUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
