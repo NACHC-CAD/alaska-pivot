@@ -5,10 +5,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.CSVRecord;
 
 import com.nach.core.util.csv.CsvUtilApache;
 
@@ -27,7 +29,9 @@ public class Pivot01NoPivot {
 	// instance variables
 	//
 
-	InputStream src;
+	InputStream flatSrc;
+	
+	InputStream pivotSrc;
 
 	OutputStream flat;
 
@@ -37,26 +41,37 @@ public class Pivot01NoPivot {
 
 	Integer[] cols;
 
+	boolean includeHeaderRow = false;
+
+	//
+	// trivial getters and setters
+	//
+	
+	public boolean getIncludeHeaderRow() {
+		return includeHeaderRow;
+	}
+
+	public void setIncludeHeaderRow(boolean includeHeaderRow) {
+		this.includeHeaderRow = includeHeaderRow;
+	}
+	
 	//
 	// constructors and init
 	//
 
 	public Pivot01NoPivot(File srcFile, File flatFile, File pivotFile, String[] colNames, Integer[] cols) {
 		try {
-			InputStream src = new FileInputStream(srcFile);
+			InputStream flatSrc = new FileInputStream(srcFile);
+			InputStream pivotSrc = new FileInputStream(srcFile);
 			OutputStream flat = new FileOutputStream(flatFile);
 			OutputStream pivot = new FileOutputStream(pivotFile);
-			init(src, flat, pivot, colNames, cols);
+			init(flatSrc, pivotSrc, flat, pivot, colNames, cols);
 		} catch (Exception exp) {
 			throw new RuntimeException(exp);
 		}
 	}
 
-	public Pivot01NoPivot(InputStream src, OutputStream flat, OutputStream pivot, String[] colNames, Integer[] cols) {
-		init(src, flat, pivot, colNames, cols);
-	}
-
-	private void init(InputStream src, OutputStream flat, OutputStream pivot, String[] colNames, Integer[] cols) {
+	private void init(InputStream flatSrc, InputStream pivotSrc, OutputStream flat, OutputStream pivot, String[] colNames, Integer[] cols) {
 		log.info("Creating pivot tool");
 		log.info("colNames: " + colNames);
 		log.info("cols: " + cols);
@@ -68,7 +83,8 @@ public class Pivot01NoPivot {
 		if (colNames.length != cols.length) {
 			throw new RuntimeException("colNames and cols must be the same length");
 		}
-		this.src = src;
+		this.flatSrc = flatSrc;
+		this.pivotSrc = pivotSrc;
 		this.flat = flat;
 		this.pivot = pivot;
 		this.colNames = colNames;
@@ -79,23 +95,51 @@ public class Pivot01NoPivot {
 	public void exec() {
 		log.info("Writing flat file...");
 		writeFlatFile();
+		writePivotFile();
 		log.info("Done writing flat file.");
 	}
 
 	private void writeFlatFile() {
+		writeFile(flatSrc, flat);
+	}
+
+	private void writePivotFile() {
+		writeFile(pivotSrc, pivot);
+	}
+
+	private void writeFile(InputStream src, OutputStream out) {
 		try {
+			int writeCnt = 0;
 			CSVParser parser = CsvUtilApache.getParser(src);
-			CSVPrinter printer = CsvUtilApache.getWriter(flat);
+			CSVPrinter printer = CsvUtilApache.getWriter(out);
 			// write the header
 			printer.printRecord(colNames);
+			writeCnt++;
 			printer.flush();
+			boolean isFirst = true;
+			for (CSVRecord record : parser) {
+				// skip the header row
+				if(includeHeaderRow == false && isFirst == true) {
+					isFirst = false;
+					continue;
+				}
+				writeCnt++;
+				ArrayList<String> row = new ArrayList<String>();
+				for(int col : cols) {
+					String str = record.get(col);
+					row.add(str);
+				}
+				printer.printRecord(row);
+				if(writeCnt % 1000 == 0) {
+					log.info("Writing row " + writeCnt);
+				}
+			}
+			log.info("Writing row " + writeCnt);
+			printer.flush();
+			log.info("Done writing flat file");
 		} catch (Exception exp) {
 			throw new RuntimeException(exp);
 		}
-	}
-
-	private void writePivotFile(InputStream src, OutputStream flat, OutputStream pivot, List<String> colNames, List<Integer> cols) {
-
 	}
 
 }
