@@ -162,7 +162,7 @@ public class PivotUtil {
 				int keyCount = constantsWidth;
 				// process the record
 				for (int i = 0; i < pivotRepeat; i++) {
-					if (record.size() > (start + pivotWidth - 1) && StringUtil.isEmpty(record.get(start)) == false) {
+					if (record.size() > (start + pivotWidth - 1) && !StringUtil.isEmpty(record.get(start))) {
 						row = new ArrayList<String>();
 						// TODO: CHECK THIS IF ALASKA GOES AWRY
 						for (int c = 0; c < this.constantsWidth; c++) {
@@ -171,7 +171,7 @@ public class PivotUtil {
 						for (int r = start; r < start + pivotWidth; r++) {
 							row.add(record.get(r));
 						}
-						if (addHeader == true) {
+						if (addHeader) {
 							keyCount = (i * pivotWidth) + constantsWidth + headerOffset;
 							row.add(keys.get(keyCount));
 						}
