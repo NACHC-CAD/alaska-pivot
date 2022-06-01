@@ -13,8 +13,10 @@ import lombok.extern.slf4j.Slf4j;
 public class LouisianaPivot {
 
 //	public static final String SRC_FILE_NAME = "C:\\_WORKSPACES\\nachc\\_PROJECT\\cosmos\\covid\\update-2021-07-07-COVID-LPCA\\_ETC\\macro\\LPCA-Thumbnail.csv\\";
-	
-	public static final String SRC_FILE_NAME = "C:\\Users\\greshje\\Downloads\\_ETC\\LPCA_AE_2021.09.27_v4.csv";
+//	public static final String SRC_FILE_NAME = "C:\\Users\\greshje\\Downloads\\_ETC\\LPCA_AE_2021.09.27_v4.csv";
+//	public static final String SRC_FILE_NAME = "C:\\_WORKSPACES\\nachc\\_CURRENT\\_PROJECT\\cosmos\\covid\\lpca\\update-2022-03-21-COVID-LPCA\\NACHC_Extract_All.csv";
+//	public static final String SRC_FILE_NAME = "C:\\Users\\gresh\\Downloads\\LPCA\\LPCA_Baseline_NACHC_Extract_All.csv";
+	public static final String SRC_FILE_NAME = "C:\\Users\\gresh\\Downloads\\lpca-2022-05-pivot\\NACHC_Extract_All_2022.05.31.csv";
 	
 	public static void main(String[] args) {
 		log.info("Starting pivots...");

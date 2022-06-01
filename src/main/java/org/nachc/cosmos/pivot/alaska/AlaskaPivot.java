@@ -13,7 +13,11 @@ public class AlaskaPivot {
 //	public static final String SRC_FILE_NAME = "C:\\_WORKSPACES\\nachc\\_PROJECT\\cosmos\\covid\\update-2021-06-22-COVID-APCA\\_ETC\\macro\\APCA_NACHC_C19_202001_202105.csv";
 //	public static final String SRC_FILE_NAME = "C:\\_WORKSPACES\\nachc\\_PROJECT\\cosmos\\covid\\update-2021-06-22-COVID-APCA\\_ETC\\macro\\testing\\APCA_NACHC_C19_202001_202105_THUMB-500.csv";
 //	public static final String SRC_FILE_NAME = "C:\\Users\\greshje\\Downloads\\Update-2021-09-15-COVID-APCA\\_ETC\\pivot\\2021-09-15_Covid19_APCA_data.csv";
-	public static final String SRC_FILE_NAME = "C:\\test\\pivot\\2021-09-15_Covid19_APCA_data.csv";
+//	public static final String SRC_FILE_NAME = "C:\\test\\pivot\\2021-09-15_Covid19_APCA_data.csv";
+//	public static final String SRC_FILE_NAME = "C:\\_WORKSPACES\\nachc\\_CURRENT\\_PROJECT\\cosmos\\covid\\apca\\update-2022-02-10-COVID-APCA\\_ETC\\2022-01-14_Covid19_APCA_data.csv";
+//	public static final String SRC_FILE_NAME = "C:\\_WORKSPACES\\nachc\\_CURRENT\\_PROJECT\\cosmos\\covid\\_scratch\\_APCA\\_APCA\\2022-02-15_Covid19_APCA_data.csv";
+	public static final String SRC_FILE_NAME = "C:\\Users\\gresh\\Downloads\\APCA_covid-19_2022-05-31\\APCA_covid-19_2022-05-31\\2022-04\\2022-04-15_Covid19_APCA.csv";
+	
 
 	public static void main(String[] args) {
 		log.info("Starting pivots...");

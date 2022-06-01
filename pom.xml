@@ -38,10 +38,11 @@
 
 		<!-- CORE NACHC FRAMEWORK STUFF -->
 		<dependency>
-			<groupId>NACHC-CAD</groupId>
+			<groupId>org.nachc.cad.tools</groupId>
 			<artifactId>core</artifactId>
-			<version>1.0.4-SNAPSHOT</version>
+			<version>0.0.14</version>
 		</dependency>
+
 	
 		<!-- YAORMA FRAMEWORK STUFF -->
 		<dependency>
